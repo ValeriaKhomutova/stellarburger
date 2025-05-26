@@ -13,11 +13,13 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
 
 export const FeedInfo: FC = () => {
   /** TODO: взять переменные из стора */
-const orders: TOrder[] = useSelector(store => store.feedReducer.feedData.orders);
-	const feed = useSelector((store) => ({
-		summ: store.feedReducer.feedData.total,
-		daysumm: store.feedReducer.feedData.totalToday
-	}));
+  const orders: TOrder[] = useSelector(
+    (store) => store.feedReducer.feedData.orders
+  );
+  const feed = useSelector((store) => ({
+    summ: store.feedReducer.feedData.total,
+    daysumm: store.feedReducer.feedData.totalToday
+  }));
   const readyOrders = getOrders(orders, 'done');
 
   const pendingOrders = getOrders(orders, 'pending');

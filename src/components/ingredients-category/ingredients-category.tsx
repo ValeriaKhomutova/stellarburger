@@ -15,7 +15,7 @@ export const IngredientsCategory = forwardRef<
     },
     ingredients: []
   };**/
-  const burgerConstructor = useSelector(store => store.burgerReducer);
+  const burgerConstructor = useSelector((store) => store.burgerReducer);
 
   const ingredientsCounters = useMemo(() => {
     const { bun, ingredients } = burgerConstructor;
