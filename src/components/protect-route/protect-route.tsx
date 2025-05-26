@@ -1,0 +1,34 @@
+import { useSelector,  useDispatch} from '../../services/store';
+import { FC, ReactElement } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+
+// Типы для пропсов компонента
+type Props = {
+  onlyForUnauthorized?: boolean; 
+  children: ReactElement;
+};
+
+export const ProtectRoute: FC<Props> = ({ 
+  onlyForUnauthorized = false, 
+  children 
+}) => {
+  // Получаем данные пользователя из хранилища
+  const { authChecked, userData: user } = useSelector(state => state.authReducer);
+  const location = useLocation();
+
+  // Если маршрут только для неавторизованных, а пользователь вошел
+  if (onlyForUnauthorized && user) {
+    // Перенаправляем откуда пришел или на главную
+    const from = location.state?.from || { pathname: '/' };
+    return <Navigate to={from} />;
+  }
+
+  // Если маршрут для авторизованных, а пользователь не вошел
+  if (!onlyForUnauthorized && !user) {
+    // Перенаправляем на логин, сохраняя откуда пришли
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
+
+  // Если все проверки пройдены - рендерим детей
+  return children;
+};
