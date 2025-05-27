@@ -3,12 +3,12 @@ import { FC, ReactElement } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 // Типы для пропсов компонента
-export type Props = {
+export type TProtectedRouteProps = {
   onlyForUnauthorized?: boolean;
   children: ReactElement;
 };
 
-export const ProtectedRoute: FC<Props> = ({
+export const ProtectedRoute: FC<TProtectedRouteProps> = ({
   onlyForUnauthorized = false,
   children
 }) => {
@@ -19,14 +19,14 @@ export const ProtectedRoute: FC<Props> = ({
   const location = useLocation();
 
   // Если маршрут только для неавторизованных, а пользователь вошел
-  if (onlyForUnauthorized && user) {
+  if (onlyForUnauthorized && user.email && user.name) {
     // Перенаправляем откуда пришел или на главную
     const from = location.state?.from || { pathname: '/' };
     return <Navigate to={from} />;
   }
 
   // Если маршрут для авторизованных, а пользователь не вошел
-  if (!onlyForUnauthorized && !user) {
+  if (!onlyForUnauthorized && (!user.email || !user.name)) {
     // Перенаправляем на логин, сохраняя откуда пришли
     return <Navigate to='/login' state={{ from: location }} />;
   }

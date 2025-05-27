@@ -13,13 +13,7 @@ import {
   SerializedError
 } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-//import { clearTokens, storeTokens } from "../../utils/cookie";
-import { authTokenManager } from '../../utils/cookie';
-/* // Вместо storeTokens(refreshToken, accessToken)
-authTokenManager.persistAuthCredential(refreshToken, accessToken);
-
-// Вместо clearTokens()
-authTokenManager.clearAuthCredentials();*/
+import { clearTokens, storeTokens } from '../../utils/cookie';
 
 type AuthState = {
   authChecked: boolean;
@@ -48,11 +42,8 @@ export const registerUser = createAsyncThunk<TUser, TRegisterData>(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    const { user, refreshToken, accessToken } = response;
-    authTokenManager.persistAuthCredential(refreshToken, accessToken);
-
-    return user;
+    storeTokens(response.refreshToken, response.accessToken);
+    return response.user;
   }
 );
 
@@ -64,11 +55,8 @@ export const loginUser = createAsyncThunk<TUser, TLoginData>(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    const { user, refreshToken, accessToken } = response;
-    authTokenManager.persistAuthCredential(refreshToken, accessToken);
-
-    return user;
+    storeTokens(response.refreshToken, response.accessToken);
+    return response.user;
   }
 );
 
@@ -80,8 +68,7 @@ export const logoutUser = createAsyncThunk(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    authTokenManager.clearAuthCredentials();
+    clearTokens();
   }
 );
 

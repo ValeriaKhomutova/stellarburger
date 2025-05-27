@@ -1,13 +1,13 @@
 import {
   ConstructorPage,
+  Feed,
   ForgotPassword,
   Login,
   NotFound404,
   Profile,
   ProfileOrders,
   Register,
-  ResetPassword,
-  Feed
+  ResetPassword
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';

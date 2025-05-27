@@ -94,6 +94,7 @@ const ordersSlice = createSlice({
       .addCase(createNewOrder.pending, (state) => {
         state.creatingOrder = true;
       })
+
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.creatingOrder = false;
         state.currentOrder = action.payload.order;
