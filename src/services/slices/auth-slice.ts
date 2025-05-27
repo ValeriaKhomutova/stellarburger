@@ -15,7 +15,7 @@ import {
 import { TUser } from '@utils-types';
 import { clearTokens, storeTokens } from '../../utils/cookie';
 
-type AuthState = {
+export type AuthState = {
   authChecked: boolean;
   isAuthenticated: boolean;
   loginError: SerializedError | null;
@@ -23,7 +23,7 @@ type AuthState = {
   userData: TUser;
 };
 
-const initialAuthState: AuthState = {
+export const initialAuthState: AuthState = {
   authChecked: false,
   isAuthenticated: false,
   loginError: null,
