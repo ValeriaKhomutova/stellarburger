@@ -6,7 +6,7 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../../src/utils/burger-api';
 import {
   createAsyncThunk,
   createSlice,

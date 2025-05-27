@@ -23,11 +23,12 @@ const rootReducer = combineReducers({
   ordersReducer,
   authReducer,
   burgerReducer,
+  
   feedReducer,
   ingredientsReducer
 });
 
-const middleware: Middleware =
+export const middleware: Middleware =
   (store: MiddlewareAPI<AppDispatch, RootState>) => (next) => (action) => {
     if (createNewOrder.fulfilled.match(action)) {
       store.dispatch(clearConstructor());

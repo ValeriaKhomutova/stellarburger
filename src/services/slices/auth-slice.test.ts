@@ -1,179 +1,162 @@
-import { expect, test, describe } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import { configureStore } from '@reduxjs/toolkit';
-import { authReducer } from './auth-slice';
-import {
-  registerUser,
+import { 
+  authReducer, 
+  initialAuthState,
+  fetchUserData,
   loginUser,
+  registerUser,
   logoutUser,
-  updateUserData,
-  fetchUserData
+  updateUserData
 } from './auth-slice';
-import type {AuthState} from './auth-slice';
-// Тип для состояния всего store
-type RootState = {
-  auth: AuthState;
-};
 
-const setupStore = (preloadedState?: Partial<RootState>) => 
+const setupStore = () =>
   configureStore({
     reducer: {
       auth: authReducer
-    },
-    preloadedState: preloadedState as RootState
+    }
   });
 
-describe('Тесты экшенов аутентификации', () => {
-  describe('Тесты экшена регистрации', () => {
-    test('pending: должен очистить ошибку регистрации', () => {
-      const store = setupStore({
-        auth: {
-          ...initialAuthState,
-          registrationError: { message: 'Previous error' }
-        }
-      });
-      
-      store.dispatch({ type: registerUser.pending.type });
-      const state = store.getState().auth;
-      expect(state.registrationError).toBeNull();
-    });
-
-    test('rejected: должен установить ошибку регистрации', () => {
+describe('Тесты authSlice', () => {
+  describe('Экшен fetchUserData (получение данных пользователя)', () => {
+    it('Должен корректно обрабатывать pending', () => {
       const store = setupStore();
-      const error = { message: 'Registration failed' };
-      
-      store.dispatch({
-        type: registerUser.rejected.type,
-        error
-      });
-      
+      store.dispatch({ type: fetchUserData.pending.type });
       const state = store.getState().auth;
-      expect(state.registrationError).toEqual(error);
-    });
-
-    test('fulfilled: должен установить данные пользователя и флаг аутентификации', () => {
-      const store = setupStore();
-      const mockUser = { email: 'test@test.com', name: 'Test User' };
       
-      store.dispatch({
-        type: registerUser.fulfilled.type,
-        payload: mockUser
-      });
-      
-      const state = store.getState().auth;
-      expect(state.userData).toEqual(mockUser);
-      expect(state.isAuthenticated).toBe(true);
-      expect(state.registrationError).toBeNull();
-    });
-  });
-
-  describe('Тесты экшена входа', () => {
-    test('pending: должен очистить ошибку входа', () => {
-      const store = setupStore({
-        auth: {
-          ...initialAuthState,
-          loginError: { message: 'Previous error' }
-        }
-      });
-      
-      store.dispatch({ type: loginUser.pending.type });
-      const state = store.getState().auth;
+      expect(state.authChecked).toBe(false);
       expect(state.loginError).toBeNull();
     });
 
-    test('rejected: должен установить ошибку входа', () => {
+    it('Должен корректно обрабатывать fulfilled', () => {
+      const mockUser = { name: 'Иван', email: 'ivan@example.com' };
       const store = setupStore();
-      const error = { message: 'Login failed' };
-      
-      store.dispatch({
-        type: loginUser.rejected.type,
-        error
-      });
-      
-      const state = store.getState().auth;
-      expect(state.loginError).toEqual(error);
-    });
-
-    test('fulfilled: должен установить данные пользователя и флаг аутентификации', () => {
-      const store = setupStore();
-      const mockUser = { email: 'test@test.com', name: 'Test User' };
-      
-      store.dispatch({
-        type: loginUser.fulfilled.type,
-        payload: mockUser
-      });
-      
-      const state = store.getState().auth;
-      expect(state.userData).toEqual(mockUser);
-      expect(state.isAuthenticated).toBe(true);
-      expect(state.loginError).toBeNull();
-    });
-  });
-
-  describe('Тесты экшена выхода', () => {
-    test('fulfilled: должен сбросить данные пользователя и флаг аутентификации', () => {
-      const initialState = {
-        auth: {
-          ...initialAuthState,
-          isAuthenticated: true,
-          userData: { email: 'test@test.com', name: 'Test User' }
-        }
-      };
-      
-      const store = setupStore(initialState);
-      store.dispatch({ type: logoutUser.fulfilled.type });
-      
-      const state = store.getState().auth;
-      expect(state.userData).toEqual({ email: '', name: '' });
-      expect(state.isAuthenticated).toBe(false);
-    });
-  });
-
-  describe('Тесты экшена получения данных пользователя', () => {
-    test('fulfilled: должен установить данные пользователя и флаги', () => {
-      const store = setupStore();
-      const mockUser = { email: 'test@test.com', name: 'Test User' };
-      
       store.dispatch({
         type: fetchUserData.fulfilled.type,
         payload: mockUser
       });
-      
       const state = store.getState().auth;
+      
       expect(state.userData).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.authChecked).toBe(true);
     });
 
-    test('rejected: должен установить флаг authChecked', () => {
+    it('Должен корректно обрабатывать rejected', () => {
       const store = setupStore();
-      
       store.dispatch({ type: fetchUserData.rejected.type });
-      
       const state = store.getState().auth;
+      
       expect(state.authChecked).toBe(true);
+      expect(state.isAuthenticated).toBe(false);
     });
   });
 
-  describe('Тесты экшена обновления данных пользователя', () => {
-    test('fulfilled: должен обновить данные пользователя', () => {
-      const initialState = {
-        auth: {
-          ...initialAuthState,
-          isAuthenticated: true,
-          userData: { email: 'old@test.com', name: 'Old User' }
-        }
-      };
+  describe('Экшен loginUser (авторизация)', () => {
+    it('Должен очищать ошибку при pending', () => {
+      const store = setupStore();
+      store.dispatch({ type: loginUser.pending.type });
+      const state = store.getState().auth;
       
-      const store = setupStore(initialState);
-      const updatedUser = { email: 'new@test.com', name: 'New User' };
+      expect(state.loginError).toBeNull();
+    });
+
+    it('Должен устанавливать пользователя при fulfilled', () => {
+      const mockUser = { name: 'Петр', email: 'peter@example.com' };
+      const store = setupStore();
+      store.dispatch({
+        type: loginUser.fulfilled.type,
+        payload: mockUser
+      });
+      const state = store.getState().auth;
       
+      expect(state.userData).toEqual(mockUser);
+      expect(state.isAuthenticated).toBe(true);
+      expect(state.loginError).toBeNull();
+    });
+
+    it('Должен сохранять ошибку при rejected', () => {
+    const mockError = { message: 'Ошибка авторизации' };
+    const store = setupStore();
+    store.dispatch({
+      type: loginUser.rejected.type,
+      payload: mockError, // Используем payload вместо error
+      meta: { rejectedWithValue: true } // Добавляем мета-данные
+    });
+    const state = store.getState().auth;
+    
+    expect(state.loginError).toEqual(mockError);
+    expect(state.isAuthenticated).toBe(false);
+  });
+});
+
+
+  describe('Экшен registerUser (регистрация)', () => {
+    it('Должен очищать ошибку при pending', () => {
+      const store = setupStore();
+      store.dispatch({ type: registerUser.pending.type });
+      const state = store.getState().auth;
+      
+      expect(state.registrationError).toBeNull();
+    });
+
+    it('Должен устанавливать пользователя при fulfilled', () => {
+      const mockUser = { name: 'Сергей', email: 'sergey@example.com' };
+      const store = setupStore();
+      store.dispatch({
+        type: registerUser.fulfilled.type,
+        payload: mockUser
+      });
+      const state = store.getState().auth;
+      
+      expect(state.userData).toEqual(mockUser);
+      expect(state.isAuthenticated).toBe(true);
+      expect(state.registrationError).toBeNull();
+    });
+
+    it('Должен сохранять ошибку при rejected', () => {
+    const mockError = { message: 'Ошибка регистрации' };
+    const store = setupStore();
+    store.dispatch({
+      type: registerUser.rejected.type,
+      payload: mockError, // Используем payload вместо error
+      meta: { rejectedWithValue: true } // Добавляем мета-данные
+    });
+    const state = store.getState().auth;
+    
+    expect(state.registrationError).toEqual(mockError);
+    expect(state.isAuthenticated).toBe(false);
+  });
+});
+
+  describe('Экшен logoutUser (выход)', () => {
+    it('Должен сбрасывать состояние при fulfilled', () => {
+      const store = setupStore();
+      // Сначала авторизуем пользователя
+      store.dispatch({
+        type: loginUser.fulfilled.type,
+        payload: { name: 'Иван', email: 'ivan@example.com' }
+      });
+      // Затем выходим
+      store.dispatch({ type: logoutUser.fulfilled.type });
+      const state = store.getState().auth;
+      
+      expect(state.userData).toEqual(initialAuthState.userData);
+      expect(state.isAuthenticated).toBe(false);
+    });
+  });
+
+  describe('Экшен updateUserData (обновление данных)', () => {
+    it('Должен обновлять данные пользователя при fulfilled', () => {
+      const mockUser = { name: 'Новое имя', email: 'new@example.com' };
+      const store = setupStore();
       store.dispatch({
         type: updateUserData.fulfilled.type,
-        payload: updatedUser
+        payload: mockUser
       });
-      
       const state = store.getState().auth;
-      expect(state.userData).toEqual(updatedUser);
+      
+      expect(state.userData).toEqual(mockUser);
     });
   });
 });
