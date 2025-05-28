@@ -11,7 +11,7 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3000', // URL вашего приложения
+    baseUrl: 'http://localhost:4000', // URL вашего приложения
     setupNodeEvents(on, config) {
       // Здесь можно добавить плагины
     },

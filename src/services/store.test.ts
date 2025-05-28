@@ -31,7 +31,7 @@ describe('Redux Store', () => {
     const fulfilledAction = {
       type: createNewOrder.fulfilled.type,
       payload: {},
-      meta: {},
+      meta: {}
     };
 
     store.dispatch(fulfilledAction);

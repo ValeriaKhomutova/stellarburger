@@ -34,7 +34,7 @@ describe('Тесты для ingredientsSlice', () => {
   ];
 
   // Создаем тестовый store
-  const setupTestStore = () => 
+  const setupTestStore = () =>
     configureStore({
       reducer: {
         ingredients: ingredientsReducer
@@ -44,7 +44,7 @@ describe('Тесты для ingredientsSlice', () => {
   it('Начальное состояние должно быть корректным', () => {
     const store = setupTestStore();
     const initialState = store.getState().ingredients;
-    
+
     expect(initialState).toEqual({
       loading: true,
       error: null,
@@ -56,7 +56,7 @@ describe('Тесты для ingredientsSlice', () => {
     it('Должен устанавливать loading=true при начале загрузки', () => {
       const store = setupTestStore();
       store.dispatch({ type: loadIngredients.pending.type });
-      
+
       const state = store.getState().ingredients;
       expect(state.loading).toBe(true);
       expect(state.error).toBeNull();
@@ -68,7 +68,7 @@ describe('Тесты для ingredientsSlice', () => {
         type: loadIngredients.fulfilled.type,
         payload: mockIngredients
       });
-      
+
       const state = store.getState().ingredients;
       expect(state.loading).toBe(false);
       expect(state.ingredients).toEqual(mockIngredients);
@@ -76,13 +76,13 @@ describe('Тесты для ingredientsSlice', () => {
     });
 
     it('Должен сохранять ошибку и сбрасывать loading при неудачной загрузке', () => {
-      const testError = {message: 'Ошибка загрузки ингредиентов'};
+      const testError = { message: 'Ошибка загрузки ингредиентов' };
       const store = setupTestStore();
       store.dispatch({
         type: loadIngredients.rejected.type,
         error: testError
       });
-      
+
       const state = store.getState().ingredients;
       expect(state.loading).toBe(false);
       expect(state.error).toEqual(testError);

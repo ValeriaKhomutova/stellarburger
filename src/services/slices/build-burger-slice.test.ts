@@ -1,6 +1,6 @@
 import { burgerReducer } from './build-burger-slice';
 import { v4 as uuidv4 } from 'uuid';
-import { 
+import {
   updateBun,
   addConstructorItem,
   deleteConstructorItem,
@@ -59,10 +59,10 @@ describe('Тесты для burgerConstructorSlice', () => {
   describe('Экшен addConstructorItem', () => {
     it('Должен добавлять ингредиент с уникальным ID', () => {
       const result = burgerReducer(
-        undefined, 
+        undefined,
         addConstructorItem(mockIngredient)
       );
-      
+
       expect(result.ingredients).toHaveLength(1);
       expect(result.ingredients[0]).toMatchObject({
         ...mockIngredient,
@@ -75,7 +75,7 @@ describe('Тесты для burgerConstructorSlice', () => {
         { bun: mockBun, ingredients: [] },
         addConstructorItem({ ...mockBun, _id: 'bun-2' })
       );
-      
+
       expect(result.bun?._id).toBe('bun-2');
       expect(result.ingredients).toHaveLength(0);
     });
@@ -90,12 +90,9 @@ describe('Тесты для burgerConstructorSlice', () => {
           { ...mockIngredient, id: 'to-delete' }
         ]
       };
-      
-      const result = burgerReducer(
-        state, 
-        deleteConstructorItem('to-delete')
-      );
-      
+
+      const result = burgerReducer(state, deleteConstructorItem('to-delete'));
+
       expect(result.ingredients).toHaveLength(1);
       expect(result.ingredients[0].id).toBe('to-keep');
     });
@@ -114,8 +111,8 @@ describe('Тесты для burgerConstructorSlice', () => {
         state,
         reorderConstructorItem({ index: 1, moveUp: true })
       );
-      
-      expect(result.ingredients.map(i => i.id)).toEqual(['2', '1', '3']);
+
+      expect(result.ingredients.map((i) => i.id)).toEqual(['2', '1', '3']);
     });
 
     it('Должен перемещать ингредиент вниз', () => {
@@ -124,8 +121,8 @@ describe('Тесты для burgerConstructorSlice', () => {
         state,
         reorderConstructorItem({ index: 1, moveUp: false })
       );
-      
-      expect(result.ingredients.map(i => i.id)).toEqual(['1', '3', '2']);
+
+      expect(result.ingredients.map((i) => i.id)).toEqual(['1', '3', '2']);
     });
   });
 
@@ -138,9 +135,9 @@ describe('Тесты для burgerConstructorSlice', () => {
           { ...mockIngredient, id: '2' }
         ]
       };
-      
+
       const result = burgerReducer(state, clearConstructor());
-      
+
       expect(result).toEqual({
         bun: null,
         ingredients: []

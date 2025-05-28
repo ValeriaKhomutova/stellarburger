@@ -1,4 +1,8 @@
-import { getOrderByNumberApi, getOrdersApi, orderBurgerApi } from '../../../src/utils/burger-api'; 
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi
+} from '../../../src/utils/burger-api';
 import {
   createAsyncThunk,
   createSlice,

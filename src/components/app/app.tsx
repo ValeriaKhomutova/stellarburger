@@ -16,6 +16,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { loadIngredients } from '../../services/slices/ingregient-slice';
+import { fetchUserData } from '../../services/slices/auth-slice';
 import { clearCurrentOrder } from '../../services/slices/add-slice';
 import { ProtectedRoute } from '../protected-route/protected-route';
 
@@ -28,6 +29,7 @@ const App = () => {
   const state = location.state as { background?: Location };
 
   useEffect(() => {
+    dispatch(fetchUserData());
     dispatch(loadIngredients());
   }, [dispatch]);
 

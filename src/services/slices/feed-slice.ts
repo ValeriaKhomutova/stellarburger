@@ -1,4 +1,4 @@
-import { getFeedsApi } from '../../../src/utils/burger-api'; 
+import { getFeedsApi } from '../../../src/utils/burger-api';
 import {
   createAsyncThunk,
   createSlice,

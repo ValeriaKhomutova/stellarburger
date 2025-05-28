@@ -35,3 +35,9 @@
 //     }
 //   }
 // }
+// 
+Cypress.Commands.add('addConstructorItem', (title) => {
+  cy.get(`[data-testid="${title}"]`).within(() => {
+    cy.get('button').first().click();
+  });
+});

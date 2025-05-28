@@ -39,12 +39,12 @@ describe('ordersSlice тесты', () => {
         createdAt: '2023-01-01',
         updatedAt: '2023-01-01'
       };
-      
+
       store.dispatch({
         type: fetchOrderDetails.fulfilled.type,
         payload: mockOrder
       });
-      
+
       const state = store.getState().orders;
       expect(state.currentOrder).toEqual(mockOrder);
       expect(state.loadingOrder).toBe(false);
@@ -64,10 +64,10 @@ describe('ordersSlice тесты', () => {
         type: loadAllOrders.rejected.type,
         error: { message: 'Test error' }
       });
-      
+
       store.dispatch({ type: loadAllOrders.pending.type });
       const state = store.getState().orders;
-      
+
       expect(state.loadingOrders).toBe(true);
       expect(state.error).toBeNull();
     });
@@ -93,12 +93,12 @@ describe('ordersSlice тесты', () => {
           updatedAt: '2023-01-02'
         }
       ];
-      
+
       store.dispatch({
         type: loadAllOrders.fulfilled.type,
         payload: mockOrders
       });
-      
+
       const state = store.getState().orders;
       expect(state.ordersList).toEqual(mockOrders);
       expect(state.loadingOrders).toBe(false);
@@ -106,12 +106,12 @@ describe('ordersSlice тесты', () => {
 
     it('должен сохранять ошибку и сбрасывать loadingOrders при rejected', () => {
       const mockError = { message: 'Failed to load orders' };
-      
+
       store.dispatch({
         type: loadAllOrders.rejected.type,
         error: mockError
       });
-      
+
       const state = store.getState().orders;
       expect(state.error).toEqual(mockError);
       expect(state.loadingOrders).toBe(false);
@@ -138,12 +138,12 @@ describe('ordersSlice тесты', () => {
         },
         name: 'New order'
       };
-      
+
       store.dispatch({
         type: createNewOrder.fulfilled.type,
         payload: mockResponse
       });
-      
+
       const state = store.getState().orders;
       expect(state.currentOrder).toEqual(mockResponse.order);
       expect(state.creatingOrder).toBe(false);
@@ -171,10 +171,10 @@ describe('ordersSlice тесты', () => {
           updatedAt: '2023-01-01'
         }
       });
-      
+
       // Затем очищаем
       store.dispatch(clearCurrentOrder());
-      
+
       const state = store.getState().orders;
       expect(state.currentOrder).toBeNull();
     });

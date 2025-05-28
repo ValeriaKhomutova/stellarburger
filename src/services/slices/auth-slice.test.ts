@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import { configureStore } from '@reduxjs/toolkit';
-import { 
-  authReducer, 
+import {
+  authReducer,
   initialAuthState,
   fetchUserData,
   loginUser,
@@ -23,7 +23,7 @@ describe('Тесты authSlice', () => {
       const store = setupStore();
       store.dispatch({ type: fetchUserData.pending.type });
       const state = store.getState().auth;
-      
+
       expect(state.authChecked).toBe(false);
       expect(state.loginError).toBeNull();
     });
@@ -36,7 +36,7 @@ describe('Тесты authSlice', () => {
         payload: mockUser
       });
       const state = store.getState().auth;
-      
+
       expect(state.userData).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.authChecked).toBe(true);
@@ -46,7 +46,7 @@ describe('Тесты authSlice', () => {
       const store = setupStore();
       store.dispatch({ type: fetchUserData.rejected.type });
       const state = store.getState().auth;
-      
+
       expect(state.authChecked).toBe(true);
       expect(state.isAuthenticated).toBe(false);
     });
@@ -57,7 +57,7 @@ describe('Тесты authSlice', () => {
       const store = setupStore();
       store.dispatch({ type: loginUser.pending.type });
       const state = store.getState().auth;
-      
+
       expect(state.loginError).toBeNull();
     });
 
@@ -69,34 +69,33 @@ describe('Тесты authSlice', () => {
         payload: mockUser
       });
       const state = store.getState().auth;
-      
+
       expect(state.userData).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.loginError).toBeNull();
     });
 
     it('Должен сохранять ошибку при rejected', () => {
-    const mockError = { message: 'Ошибка авторизации' };
-    const store = setupStore();
-    store.dispatch({
-      type: loginUser.rejected.type,
-      payload: mockError, // Используем payload вместо error
-      meta: { rejectedWithValue: true } // Добавляем мета-данные
-    });
-    const state = store.getState().auth;
-    
-    expect(state.loginError).toEqual(mockError);
-    expect(state.isAuthenticated).toBe(false);
-  });
-});
+      const mockError = { message: 'Ошибка авторизации' };
+      const store = setupStore();
+      store.dispatch({
+        type: loginUser.rejected.type,
+        payload: mockError, // Используем payload вместо error
+        meta: { rejectedWithValue: true } // Добавляем мета-данные
+      });
+      const state = store.getState().auth;
 
+      expect(state.loginError).toEqual(mockError);
+      expect(state.isAuthenticated).toBe(false);
+    });
+  });
 
   describe('Экшен registerUser (регистрация)', () => {
     it('Должен очищать ошибку при pending', () => {
       const store = setupStore();
       store.dispatch({ type: registerUser.pending.type });
       const state = store.getState().auth;
-      
+
       expect(state.registrationError).toBeNull();
     });
 
@@ -108,26 +107,26 @@ describe('Тесты authSlice', () => {
         payload: mockUser
       });
       const state = store.getState().auth;
-      
+
       expect(state.userData).toEqual(mockUser);
       expect(state.isAuthenticated).toBe(true);
       expect(state.registrationError).toBeNull();
     });
 
     it('Должен сохранять ошибку при rejected', () => {
-    const mockError = { message: 'Ошибка регистрации' };
-    const store = setupStore();
-    store.dispatch({
-      type: registerUser.rejected.type,
-      payload: mockError, // Используем payload вместо error
-      meta: { rejectedWithValue: true } // Добавляем мета-данные
+      const mockError = { message: 'Ошибка регистрации' };
+      const store = setupStore();
+      store.dispatch({
+        type: registerUser.rejected.type,
+        payload: mockError, // Используем payload вместо error
+        meta: { rejectedWithValue: true } // Добавляем мета-данные
+      });
+      const state = store.getState().auth;
+
+      expect(state.registrationError).toEqual(mockError);
+      expect(state.isAuthenticated).toBe(false);
     });
-    const state = store.getState().auth;
-    
-    expect(state.registrationError).toEqual(mockError);
-    expect(state.isAuthenticated).toBe(false);
   });
-});
 
   describe('Экшен logoutUser (выход)', () => {
     it('Должен сбрасывать состояние при fulfilled', () => {
@@ -140,7 +139,7 @@ describe('Тесты authSlice', () => {
       // Затем выходим
       store.dispatch({ type: logoutUser.fulfilled.type });
       const state = store.getState().auth;
-      
+
       expect(state.userData).toEqual(initialAuthState.userData);
       expect(state.isAuthenticated).toBe(false);
     });
@@ -155,7 +154,7 @@ describe('Тесты authSlice', () => {
         payload: mockUser
       });
       const state = store.getState().auth;
-      
+
       expect(state.userData).toEqual(mockUser);
     });
   });

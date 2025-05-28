@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   ordersReducer,
   authReducer,
   burgerReducer,
-  
+
   feedReducer,
   ingredientsReducer
 });

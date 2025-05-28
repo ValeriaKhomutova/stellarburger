@@ -30,7 +30,7 @@ describe('Тесты для feedSlice', () => {
   it('Начальное состояние должно быть корректным', () => {
     const store = createTestStore();
     const state = store.getState().feed;
-    
+
     expect(state).toEqual({
       loading: true,
       error: null,
@@ -47,7 +47,7 @@ describe('Тесты для feedSlice', () => {
       const store = createTestStore();
       store.dispatch({ type: fetchFeedData.pending.type });
       const state = store.getState().feed;
-      
+
       expect(state.loading).toBe(true);
       expect(state.error).toBeNull();
     });
@@ -59,7 +59,7 @@ describe('Тесты для feedSlice', () => {
         payload: mockFeedData
       });
       const state = store.getState().feed;
-      
+
       expect(state.loading).toBe(false);
       expect(state.error).toBeNull();
       expect(state.feedData).toEqual(mockFeedData);
@@ -73,7 +73,7 @@ describe('Тесты для feedSlice', () => {
         error: testError
       });
       const state = store.getState().feed;
-      
+
       expect(state.loading).toBe(false);
       expect(state.error).toEqual(testError);
       expect(state.feedData.orders).toHaveLength(0);
