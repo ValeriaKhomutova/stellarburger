@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { OrderStatusProps } from './type';
 import { OrderStatusUI } from '@ui';
 
-const statusText: { [key: string]: string } = {
+export const statusText: { [key: string]: string } = {
   pending: 'Готовится',
   done: 'Выполнен',
   created: 'Создан'

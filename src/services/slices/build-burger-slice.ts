@@ -3,13 +3,13 @@ import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { v4 as generateId } from 'uuid';
 
 interface BurgerConstructorState {
-  selectedBun: TIngredient | null;
-  fillingIngredients: TConstructorIngredient[];
+  bun: TIngredient | null;
+  ingredients: TConstructorIngredient[];
 }
 
 const initialConstructorState: BurgerConstructorState = {
-  selectedBun: null,
-  fillingIngredients: []
+  bun: null,
+  ingredients: []
 };
 
 const burgerConstructorSlice = createSlice({
@@ -17,7 +17,7 @@ const burgerConstructorSlice = createSlice({
   initialState: initialConstructorState,
   reducers: {
     updateBun: (state, action: PayloadAction<TIngredient | null>) => {
-      state.selectedBun = action.payload;
+      state.bun = action.payload;
     },
     addConstructorItem: {
       prepare: (itemData: TIngredient) => ({
@@ -25,35 +25,32 @@ const burgerConstructorSlice = createSlice({
       }),
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
-          state.selectedBun = action.payload;
+          state.bun = action.payload;
         } else {
-          state.fillingIngredients.push(action.payload);
+          state.ingredients.push(action.payload);
         }
       }
     },
     deleteConstructorItem: (state, action: PayloadAction<string>) => {
-      state.fillingIngredients = state.fillingIngredients.filter(
+      state.ingredients = state.ingredients.filter(
         (item) => item.id !== action.payload
       );
     },
     reorderConstructorItem: (
       state,
-      action: PayloadAction<{ itemIndex: number; moveUp: boolean }>
+      action: PayloadAction<{ index: number; moveUp: boolean }>
     ) => {
-      const { itemIndex, moveUp } = action.payload;
-      const items = [...state.fillingIngredients];
-      const targetIndex = moveUp ? itemIndex - 1 : itemIndex + 1;
+      const { index, moveUp } = action.payload;
+      const items = [...state.ingredients];
+      const targetIndex = moveUp ? index - 1 : index + 1;
 
-      [items[itemIndex], items[targetIndex]] = [
-        items[targetIndex],
-        items[itemIndex]
-      ];
+      [items[index], items[targetIndex]] = [items[targetIndex], items[index]];
 
-      state.fillingIngredients = items;
+      state.ingredients = items;
     },
     clearConstructor: (state) => {
-      state.selectedBun = null;
-      state.fillingIngredients = [];
+      state.bun = null;
+      state.ingredients = [];
     }
   }
 });

@@ -46,30 +46,14 @@ export function deleteCookie(name: string) {
   setCookie(name, '', { expires: -1 });
 }
 
-interface TokenStorage {
-  persistAuthCredential: (credential: string, shortTermKey: string) => void;
-  clearAuthCredentials: () => void;
-}
+export const storeTokens = (refreshToken: string, accessToken: string) => {
+  localStorage.setItem('refreshToken', String(refreshToken));
 
-const createTokenManager = (): TokenStorage => {
-  const longTermStorageKey = 'sessionCredential';
-  const shortTermStorageKey = 'authToken';
-
-  return {
-    persistAuthCredential: (longTermCred: string, shortTermCred: string) => {
-      window.localStorage.setItem(longTermStorageKey, longTermCred);
-      document.cookie = `${shortTermStorageKey}=${shortTermCred}; path=/; secure; samesite=strict`;
-    },
-
-    clearAuthCredentials: () => {
-      window.localStorage.removeItem(longTermStorageKey);
-      document.cookie = `${shortTermStorageKey}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    }
-  };
+  setCookie('accessToken', String(accessToken));
 };
 
-export const authTokenManager = createTokenManager();
+export const clearTokens = () => {
+  localStorage.removeItem('refreshToken');
 
-// Usage example:
-// authTokenManager.persistAuthCredential(refreshToken, accessToken);
-// authTokenManager.clearAuthCredentials();
+  deleteCookie('accessToken');
+};

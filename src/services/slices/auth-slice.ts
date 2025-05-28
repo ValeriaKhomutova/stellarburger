@@ -6,22 +6,16 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../../src/utils/burger-api';
 import {
   createAsyncThunk,
   createSlice,
   SerializedError
 } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-//import { clearTokens, storeTokens } from "../../utils/cookie";
-import { authTokenManager } from '../../utils/cookie';
-/* // Вместо storeTokens(refreshToken, accessToken)
-authTokenManager.persistAuthCredential(refreshToken, accessToken);
+import { clearTokens, storeTokens } from '../../utils/cookie';
 
-// Вместо clearTokens()
-authTokenManager.clearAuthCredentials();*/
-
-type AuthState = {
+export type AuthState = {
   authChecked: boolean;
   isAuthenticated: boolean;
   loginError: SerializedError | null;
@@ -29,7 +23,7 @@ type AuthState = {
   userData: TUser;
 };
 
-const initialAuthState: AuthState = {
+export const initialAuthState: AuthState = {
   authChecked: false,
   isAuthenticated: false,
   loginError: null,
@@ -48,11 +42,8 @@ export const registerUser = createAsyncThunk<TUser, TRegisterData>(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    const { user, refreshToken, accessToken } = response;
-    authTokenManager.persistAuthCredential(refreshToken, accessToken);
-
-    return user;
+    storeTokens(response.refreshToken, response.accessToken);
+    return response.user;
   }
 );
 
@@ -64,11 +55,8 @@ export const loginUser = createAsyncThunk<TUser, TLoginData>(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    const { user, refreshToken, accessToken } = response;
-    authTokenManager.persistAuthCredential(refreshToken, accessToken);
-
-    return user;
+    storeTokens(response.refreshToken, response.accessToken);
+    return response.user;
   }
 );
 
@@ -80,8 +68,7 @@ export const logoutUser = createAsyncThunk(
     if (!response.success) {
       return rejectWithValue(response);
     }
-
-    authTokenManager.clearAuthCredentials();
+    clearTokens();
   }
 );
 
