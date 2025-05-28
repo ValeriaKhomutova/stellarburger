@@ -19,7 +19,7 @@ const setupStore = () =>
 
 describe('Тесты authSlice', () => {
   describe('Экшен fetchUserData (получение данных пользователя)', () => {
-    it('Должен корректно обрабатывать pending', () => {
+    it('Обработка pending', () => {
       const store = setupStore();
       store.dispatch({ type: fetchUserData.pending.type });
       const state = store.getState().auth;
@@ -28,7 +28,7 @@ describe('Тесты authSlice', () => {
       expect(state.loginError).toBeNull();
     });
 
-    it('Должен корректно обрабатывать fulfilled', () => {
+    it('Обработка fulfilled', () => {
       const mockUser = { name: 'Иван', email: 'ivan@example.com' };
       const store = setupStore();
       store.dispatch({
@@ -42,7 +42,7 @@ describe('Тесты authSlice', () => {
       expect(state.authChecked).toBe(true);
     });
 
-    it('Должен корректно обрабатывать rejected', () => {
+    it('обработка rejected', () => {
       const store = setupStore();
       store.dispatch({ type: fetchUserData.rejected.type });
       const state = store.getState().auth;
@@ -53,7 +53,7 @@ describe('Тесты authSlice', () => {
   });
 
   describe('Экшен loginUser (авторизация)', () => {
-    it('Должен очищать ошибку при pending', () => {
+    it('очищение ошибки при pending', () => {
       const store = setupStore();
       store.dispatch({ type: loginUser.pending.type });
       const state = store.getState().auth;
@@ -61,7 +61,7 @@ describe('Тесты authSlice', () => {
       expect(state.loginError).toBeNull();
     });
 
-    it('Должен устанавливать пользователя при fulfilled', () => {
+    it('устанавливание пользователя при fulfilled', () => {
       const mockUser = { name: 'Петр', email: 'peter@example.com' };
       const store = setupStore();
       store.dispatch({
@@ -99,7 +99,7 @@ describe('Тесты authSlice', () => {
       expect(state.registrationError).toBeNull();
     });
 
-    it('Должен устанавливать пользователя при fulfilled', () => {
+    it('установка пользователя при fulfilled', () => {
       const mockUser = { name: 'Сергей', email: 'sergey@example.com' };
       const store = setupStore();
       store.dispatch({
@@ -146,7 +146,7 @@ describe('Тесты authSlice', () => {
   });
 
   describe('Экшен updateUserData (обновление данных)', () => {
-    it('Должен обновлять данные пользователя при fulfilled', () => {
+    it('обновление данных пользователя при fulfilled', () => {
       const mockUser = { name: 'Новое имя', email: 'new@example.com' };
       const store = setupStore();
       store.dispatch({

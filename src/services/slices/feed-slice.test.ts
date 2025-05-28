@@ -43,7 +43,7 @@ describe('Тесты для feedSlice', () => {
   });
 
   describe('Экшен fetchFeedData', () => {
-    it('Должен устанавливать loading в true при pending', () => {
+    it('устанавка loading в true', () => {
       const store = createTestStore();
       store.dispatch({ type: fetchFeedData.pending.type });
       const state = store.getState().feed;

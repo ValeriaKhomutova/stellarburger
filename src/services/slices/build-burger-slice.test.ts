@@ -36,7 +36,7 @@ describe('Тесты для burgerConstructorSlice', () => {
     type: 'bun'
   };
 
-  it('Начальное состояние должно быть пустым', () => {
+  it('Начальное состояние пустое', () => {
     expect(burgerReducer(undefined, { type: 'unknown' })).toEqual({
       bun: null,
       ingredients: []
@@ -44,12 +44,12 @@ describe('Тесты для burgerConstructorSlice', () => {
   });
 
   describe('Экшен updateBun', () => {
-    it('Должен обновлять булку в конструкторе', () => {
+    it('обновление булки в конструкторе', () => {
       const result = burgerReducer(undefined, updateBun(mockBun));
       expect(result.bun).toEqual(mockBun);
     });
 
-    it('Должен сбрасывать булку при передаче null', () => {
+    it('сброс булки при передаче null', () => {
       const state = { bun: mockBun, ingredients: [] };
       const result = burgerReducer(state, updateBun(null));
       expect(result.bun).toBeNull();
@@ -57,7 +57,7 @@ describe('Тесты для burgerConstructorSlice', () => {
   });
 
   describe('Экшен addConstructorItem', () => {
-    it('Должен добавлять ингредиент с уникальным ID', () => {
+    it('добавить ингредиент с уникальным ID', () => {
       const result = burgerReducer(
         undefined,
         addConstructorItem(mockIngredient)
@@ -70,7 +70,7 @@ describe('Тесты для burgerConstructorSlice', () => {
       });
     });
 
-    it('Должен заменять булку, если добавляется новая', () => {
+    it('замена булки, если добавляется новая', () => {
       const result = burgerReducer(
         { bun: mockBun, ingredients: [] },
         addConstructorItem({ ...mockBun, _id: 'bun-2' })
@@ -82,7 +82,7 @@ describe('Тесты для burgerConstructorSlice', () => {
   });
 
   describe('Экшен deleteConstructorItem', () => {
-    it('Должен удалять ингредиент по ID', () => {
+    it('Удаление ингредиента по ID', () => {
       const state = {
         bun: null,
         ingredients: [
@@ -127,7 +127,7 @@ describe('Тесты для burgerConstructorSlice', () => {
   });
 
   describe('Экшен clearConstructor', () => {
-    it('Должен полностью очищать конструктор', () => {
+    it('Очищение конструктора', () => {
       const state = {
         bun: mockBun,
         ingredients: [
